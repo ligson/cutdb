@@ -36,8 +36,19 @@
         <property name="logAbandoned" value="true"/>
     </bean>
 
+    <!--多租户配置-->
+    <bean id="datasourceConnectionProvider"
+          class="org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+    <bean id="schemaBasedMultiTenantConnectionProvider"
+          class="cutdb.hb.SchemaBasedMultiTenantConnectionProvider">
+        <property name="datasourceConnectionProvider" ref="datasourceConnectionProvider"/>
+    </bean>
+
     <bean id="mySessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="entityInterceptor" ref="tableInterceptor"/>
         <property name="dataSource" ref="dataSource"/>
         <property name="packagesToScan">
             <list>
@@ -50,8 +61,14 @@
                 <prop key="hibernate.show_sql">${db.showSql}</prop>
                 <prop key="hibernate.hbm2ddl.auto">update</prop>
                 <prop key="current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
-                <!--<prop key="current_session_context_class">thread</prop>-->
-                <!--<prop key="current_session_context_class">thread</prop>-->
+                <!--多租户设置-->
+                <prop key="hibernate.multiTenancy">SCHEMA</prop>
+                <!--<prop key="hibernate.multiTenancy">DATABASE</prop>-->
+                <prop key="hibernate.tenant_identifier_resolver">cutdb.hb.TenantIdResolver</prop>
+                <prop key="hibernate.multi_tenant_connection_provider">
+                    cutdb.hb.SchemaBasedMultiTenantConnectionProvider
+                </prop>
+
                 <!--二级缓存配置-->
                 <!--<prop key="hibernate.use_second_level_cache">true</prop>
                 <prop key="hibernate.use_query_cache">true</prop>
@@ -71,6 +88,7 @@
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="mySessionFactory"/>
+        <property name="autodetectDataSource" value="false"/>
     </bean>
 
     <!--注解型事务扫描 -->

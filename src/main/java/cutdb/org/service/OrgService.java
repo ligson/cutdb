@@ -1,6 +1,7 @@
 package cutdb.org.service;
 
 import cutdb.org.domain.Org;
+import cutdb.user.domain.User;
 
 import java.util.List;
 

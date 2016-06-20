@@ -15,7 +15,7 @@ public class Bootstrap {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-conf.xml");
         OrgService orgService = (OrgService) applicationContext.getBean("orgService");
         UserService userService = (UserService) applicationContext.getBean("userService");
-        Org org = orgService.addOrg("org1");
-        User user = userService.register("user1", "password", true, org);
+        Org org = orgService.addOrg("org3");
+        User user = userService.register("user3", "password", true, org);
     }
 }
