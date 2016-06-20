@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <!-- 控制台输出日志 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss} %-5level %thread{10} 【%c:%L】 >>> %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--每天生成一个日志文件，保存30天的日志文件。-->
+    <appender name="DayFile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/logFile.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%-4relative [%thread] %-5level %logger{35} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <!--指定logger name为包名或类全名 指定级别 additivity设置是否传递到root logger -->
+    <logger name="slf4j" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="DayFile"/>
+    </logger>
+    <!--slf4j2包下的类在ERROR级别时候传递到root logger中-->
+    <logger name="slf4j2" level="ERROR"/>
+    <logger name="org.apache.zookeeper" level="ERROR"/>
+    <logger name="com.alibaba.dubbo" level="ERROR"/>
+    <logger name="org.I0Itec.zkclient" level="ERROR"/>
+    <logger name="com.alibaba.druid" level="ERROR"/>
+    <logger name="org.springframework" level="DEBUG"/>
+
+    <!-- 打印 db相关日志，包括sql -->
+    <logger name="java.sql.Connection" level="DEBUG"/>
+    <logger name="java.sql.Statement" level="DEBUG"/>
+    <logger name="java.sql.PreparedStatement" level="DEBUG"/>
+    <logger name="java.sql.ResultSet" level="DEBUG"/>
+
+    <!--根logger控制-->
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+</configuration>
