@@ -1,5 +1,6 @@
 package cutdb.main;
 
+import cutdb.common.model.AppContext;
 import cutdb.org.domain.Org;
 import cutdb.org.service.OrgService;
 import cutdb.user.domain.User;
@@ -15,7 +16,12 @@ public class Bootstrap {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-conf.xml");
         OrgService orgService = (OrgService) applicationContext.getBean("orgService");
         UserService userService = (UserService) applicationContext.getBean("userService");
-        Org org = orgService.addOrg("org3");
-        User user = userService.register("user3", "password", true, org);
+        for (int i = 0; i < 2; i++) {
+            AppContext.currentTenantId = "org" + (i + 1);
+            Org org = orgService.addOrg("org" + (i + 1));
+            User user = userService.register("user1", "password", true, org);
+            System.out.println(user);
+        }
+
     }
 }

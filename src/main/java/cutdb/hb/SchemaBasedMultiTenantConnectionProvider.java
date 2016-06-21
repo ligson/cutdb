@@ -1,12 +1,20 @@
 package cutdb.hb;
 
 import org.hibernate.HibernateException;
+import org.hibernate.cfg.Environment;
+import org.hibernate.engine.config.spi.ConfigurationService;
 import org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl;
 import org.hibernate.engine.jdbc.connections.spi.MultiTenantConnectionProvider;
-import org.springframework.beans.factory.InitializingBean;
+import org.hibernate.service.spi.ServiceRegistryAwareService;
+import org.hibernate.service.spi.ServiceRegistryImplementor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Marker;
+import org.slf4j.MarkerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -16,20 +24,10 @@ import java.util.Map;
  * DriverManagerdatasourceConnectionProviderImpl类是直接读取hibernate配置文件的，
  * 而DatasourcedatasourceConnectionProviderImpl是能够读取spring配置文件中的DataSource。
  */
-public class SchemaBasedMultiTenantConnectionProvider implements MultiTenantConnectionProvider, InitializingBean {
+
+public class SchemaBasedMultiTenantConnectionProvider implements MultiTenantConnectionProvider, ServiceRegistryAwareService {
+    private static Logger logger = LoggerFactory.getLogger(SchemaBasedMultiTenantConnectionProvider.class);
     private DatasourceConnectionProviderImpl datasourceConnectionProvider = new DatasourceConnectionProviderImpl();
-
-    public DatasourceConnectionProviderImpl getDatasourceConnectionProvider() {
-        return datasourceConnectionProvider;
-    }
-
-    public void setDatasourceConnectionProvider(DatasourceConnectionProviderImpl datasourceConnectionProvider) {
-        this.datasourceConnectionProvider = datasourceConnectionProvider;
-    }
-
-    public void configure(Map configurationValues) {
-        this.datasourceConnectionProvider.configure(configurationValues);
-    }
 
     public Connection getAnyConnection() throws SQLException {
         return datasourceConnectionProvider.getConnection();
@@ -59,24 +57,29 @@ public class SchemaBasedMultiTenantConnectionProvider implements MultiTenantConn
     }
 
     public boolean supportsAggressiveRelease() {
-        return this.datasourceConnectionProvider.supportsAggressiveRelease();
+        return true;
     }
 
 
     public void stop() {
-        this.datasourceConnectionProvider.stop();
+        datasourceConnectionProvider.stop();
     }
 
     public boolean isUnwrappableAs(Class unwrapType) {
-        return this.datasourceConnectionProvider.isUnwrappableAs(unwrapType);
+        return datasourceConnectionProvider.isUnwrappableAs(unwrapType);
     }
 
     public <T> T unwrap(Class<T> unwrapType) {
-        return this.datasourceConnectionProvider.unwrap(unwrapType);
+        return datasourceConnectionProvider.unwrap(unwrapType);
     }
 
+
     @Override
-    public void afterPropertiesSet() throws Exception {
-        System.out.println("ini..................." + datasourceConnectionProvider);
+    public void injectServices(ServiceRegistryImplementor serviceRegistry) {
+        Map settings = serviceRegistry.getService(ConfigurationService.class).getSettings();
+        DataSource dataSource = (DataSource) settings.get(Environment.DATASOURCE);
+        datasourceConnectionProvider.setDataSource(dataSource);
+        datasourceConnectionProvider.configure(settings);
+        logger.debug("connection provider:{}", datasourceConnectionProvider);
     }
 }

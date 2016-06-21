@@ -27,7 +27,7 @@
     <logger name="com.alibaba.dubbo" level="ERROR"/>
     <logger name="org.I0Itec.zkclient" level="ERROR"/>
     <logger name="com.alibaba.druid" level="ERROR"/>
-    <logger name="org.springframework" level="ERROR"/>
+    <logger name="org.springframework" level="DEBUG"/>
 
     <!-- 打印 db相关日志，包括sql -->
     <logger name="java.sql.Connection" level="DEBUG"/>

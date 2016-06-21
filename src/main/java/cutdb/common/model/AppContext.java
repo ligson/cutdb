@@ -7,4 +7,5 @@ import cutdb.org.domain.Org;
  */
 public class AppContext {
     public static Org currentOrg;
+    public static String currentTenantId;
 }

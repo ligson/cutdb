@@ -37,14 +37,14 @@
     </bean>
 
     <!--多租户配置-->
-    <bean id="datasourceConnectionProvider"
+    <!--<bean id="datasourceConnectionProvider"
           class="org.hibernate.engine.jdbc.connections.internal.DatasourceConnectionProviderImpl">
         <property name="dataSource" ref="dataSource"/>
     </bean>
     <bean id="schemaBasedMultiTenantConnectionProvider"
           class="cutdb.hb.SchemaBasedMultiTenantConnectionProvider">
         <property name="datasourceConnectionProvider" ref="datasourceConnectionProvider"/>
-    </bean>
+    </bean>-->
 
     <bean id="mySessionFactory"
           class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
@@ -59,7 +59,8 @@
             <props>
                 <prop key="hibernate.dialect">${db.dialect}</prop>
                 <prop key="hibernate.show_sql">${db.showSql}</prop>
-                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <!--<prop key="hibernate.hbm2ddl.auto">update</prop>-->
+                <prop key="hibernate.hbm2ddl.auto">create</prop>
                 <prop key="current_session_context_class">org.springframework.orm.hibernate5.SpringSessionContext</prop>
                 <!--多租户设置-->
                 <prop key="hibernate.multiTenancy">SCHEMA</prop>
@@ -88,6 +89,7 @@
     <bean id="transactionManager"
           class="org.springframework.orm.hibernate5.HibernateTransactionManager">
         <property name="sessionFactory" ref="mySessionFactory"/>
+        <!--数据源自己选择-->
         <property name="autodetectDataSource" value="false"/>
     </bean>
 

@@ -1,17 +1,16 @@
 package cutdb.hb;
 
+import cutdb.common.model.AppContext;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.context.spi.CurrentTenantIdentifierResolver;
 
 /**
  * Created by trq on 2016/6/20.
  */
 public class TenantIdResolver implements CurrentTenantIdentifierResolver {
-    private SessionFactory sessionFactory;
     @Override
     public String resolveCurrentTenantIdentifier() {
-        return "org1";
+        return AppContext.currentTenantId;
     }
 
     @Override
