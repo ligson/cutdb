@@ -31,6 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> list(String[] propNames) {
+        return userDao.list(propNames);
+    }
+
+    @Override
     public User register(String name, String password, Boolean sex, Org org) {
         User user = new User();
         user.setName(name);

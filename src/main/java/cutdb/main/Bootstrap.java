@@ -16,12 +16,14 @@ public class Bootstrap {
         ApplicationContext applicationContext = new ClassPathXmlApplicationContext("spring-conf.xml");
         OrgService orgService = (OrgService) applicationContext.getBean("orgService");
         UserService userService = (UserService) applicationContext.getBean("userService");
-        for (int i = 0; i < 2; i++) {
+        /*for (int i = 0; i < 2; i++) {
             AppContext.currentTenantId = "org" + (i + 1);
             Org org = orgService.addOrg("org" + (i + 1));
             User user = userService.register("user1", "password", true, org);
             System.out.println(user);
-        }
+        }*/
+        AppContext.currentTenantId = "org1";
+        System.out.println(userService.list(new String[]{"id","name"}).get(0));
 
     }
 }

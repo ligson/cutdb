@@ -77,4 +77,16 @@ public class User implements Serializable {
     public void setOrg(Org org) {
         this.org = org;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", password='" + password + '\'' +
+                ", createDate=" + createDate +
+                ", sex=" + sex +
+                ", org=" + org +
+                '}';
+    }
 }

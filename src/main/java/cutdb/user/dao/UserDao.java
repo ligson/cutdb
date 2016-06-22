@@ -9,4 +9,6 @@ import java.util.List;
 public interface UserDao {
     public User insert(User user);
     public List<User> findAll();
+
+    List<User> list(String[] propNames);
 }

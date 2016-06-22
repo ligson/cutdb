@@ -11,5 +11,7 @@ import java.util.List;
 public interface UserService {
     public List<User> list();
 
+    List<User> list(String[] propNames);
+
     public User register(String name, String password, Boolean sex, Org org);
 }
