@@ -4,6 +4,8 @@ import cutdb.user.dao.UserDao;
 import cutdb.user.domain.User;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,7 @@ import java.util.List;
  */
 @Repository("userDao")
 public class UserDaoImpl implements UserDao {
+    private static Logger logger = LoggerFactory.getLogger(UserDaoImpl.class);
     @Autowired
     private SessionFactory sessionFactory;
 
@@ -36,12 +39,12 @@ public class UserDaoImpl implements UserDao {
         for (String propName : propNames) {
             hql += propName + ",";
         }
-        hql = hql.substring(0, hql.length() - 1);
-        Query query = sessionFactory.getCurrentSession().createQuery(hql + " from User");
-
+        hql = hql.substring(0, hql.length() - 1)+" from User";
+        logger.info("-----------------------------------------------------hql:{}",hql);
+        Query query = sessionFactory.getCurrentSession().createQuery(hql);
+        query.
         List<User> users = new ArrayList<>();
         List list = query.list();
-        //list.get(0)
         return (List<User>) query.list();
     }
 }
