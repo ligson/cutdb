@@ -8,9 +8,9 @@ sourceCompatibility = 1.8
 
 repositories {
     mavenLocal()
-    maven { url "http://117.121.26.96:31010/nexus/content/groups/public/" }
-    maven { url "http://nexus.codertostar.com/content/groups/public/" }
-    //mavenCentral()
+    //maven { url "http://117.121.26.96:31010/nexus/content/groups/public/" }
+    //maven { url "http://nexus.codertostar.com/content/groups/public/" }
+    mavenCentral()
 }
 
 ext {
