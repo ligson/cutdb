@@ -1,6 +1,5 @@
 package cutdb.user.service.impl;
 
-import cutdb.org.domain.Org;
 import cutdb.user.dao.UserDao;
 import cutdb.user.domain.User;
 import cutdb.user.service.UserService;
@@ -20,30 +19,41 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
+    private final UserDao userDao;
+
     @Autowired
-    private UserDao userDao;
+    public UserServiceImpl(UserDao userDao) {
+        this.userDao = userDao;
+    }
 
     @Override
     public List<User> list() {
-        List<User> users = new ArrayList<>();
-        userDao.findAll().forEach(user1 -> users.add(user1));
-        return users;
+        return new ArrayList<>(userDao.findAll());
     }
 
     @Override
     public List<User> list(String[] propNames) {
-        return userDao.list(propNames);
+        return userDao.findAll();
     }
 
     @Override
-    public User register(String name, String password, Boolean sex, Org org) {
+    public List<User> list(Integer org) {
+        return userDao.findAllByOrg(org.longValue());
+    }
+
+    @Override
+    public User register(String name, String password, Boolean sex) {
         User user = new User();
         user.setName(name);
         user.setCreateDate(new Date());
         user.setSex(sex);
         user.setPassword(DigestUtils.md5DigestAsHex(password.getBytes()));
-        user.setOrg(org);
-        userDao.insert(user);
+        userDao.save(user);
         return user;
+    }
+
+    @Override
+    public User save(User user) {
+        return userDao.save(user);
     }
 }

@@ -1,6 +1,5 @@
 package cutdb.user.service;
 
-import cutdb.org.domain.Org;
 import cutdb.user.domain.User;
 
 import java.util.List;
@@ -9,9 +8,13 @@ import java.util.List;
  * Created by trq on 2016/6/16.
  */
 public interface UserService {
-    public List<User> list();
+    List<User> list();
 
     List<User> list(String[] propNames);
 
-    public User register(String name, String password, Boolean sex, Org org);
+    List<User> list(Integer org);
+
+    User register(String name, String password, Boolean sex);
+
+    User save(User user);
 }

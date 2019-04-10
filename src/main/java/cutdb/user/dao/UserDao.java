@@ -1,14 +1,15 @@
 package cutdb.user.dao;
 
 import cutdb.user.domain.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
 /**
  * Created by trq on 2016/6/16.
  */
-public interface UserDao {
-    public User insert(User user);
-    public List<User> findAll();
-
-    List<User> list(String[] propNames);
+@Repository
+public interface UserDao extends JpaRepository<User, String> {
+    List<User> findAllByOrg(Long org);
 }

@@ -1,0 +1,17 @@
+spring:
+  #  datasource:
+  #    driver-class-name: com.mysql.cj.jdbc.Driver
+  #    username: root
+  #    password: root
+  #    url: jdbc:mysql://10.10.65.43:3306/test
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    open-in-view: true
+logging:
+  level:
+    org.hibernate: info
+    io.shardingjdbc: debug
+    cutdb: debug
