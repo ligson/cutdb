@@ -1,12 +1,12 @@
 group 'org.ligson'
 version '1.0-SNAPSHOT'
-
 buildscript {
     ext {
         //plugins {
         //    id 'org.springframework.boot' version '2.1.4.RELEASE'
         //}
         springBootVersion = "2.1.4.RELEASE"
+        springCloudVersion = 'Greenwich.RELEASE'
     }
     repositories {
         mavenLocal()
@@ -18,40 +18,53 @@ buildscript {
 
     }
 }
-apply plugin: 'java'
-apply plugin: 'idea'
-apply plugin: 'org.springframework.boot'
-apply plugin: 'io.spring.dependency-management'
 
-sourceCompatibility = 1.8
+subprojects {
+
+    apply plugin: 'java'
+    apply plugin: 'idea'
+    apply plugin: 'org.springframework.boot'
+    apply plugin: 'io.spring.dependency-management'
+
+    sourceCompatibility = 1.8
 
 
-repositories {
-    mavenLocal()
-    //maven { url "http://117.121.26.96:31010/nexus/content/groups/public/" }
-    //maven { url "http://nexus.codertostar.com/content/groups/public/" }
-    maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
-    mavenCentral()
-}
+    repositories {
+        mavenLocal()
+        //maven { url "http://117.121.26.96:31010/nexus/content/groups/public/" }
+        //maven { url "http://nexus.codertostar.com/content/groups/public/" }
+        maven { url "http://maven.aliyun.com/nexus/content/groups/public" }
+        mavenCentral()
+    }
 
-dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.11'
-    //spring依赖
-    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
-    compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
+    dependencyManagement {
+        imports {
+            mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+        }
+    }
 
-    //lombok
-    compile group: 'org.projectlombok', name: 'lombok'
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.11'
+        //spring依赖
+        // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web
+        compile(group: 'org.springframework.boot', name: 'spring-boot-starter-web') {
+            exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+        }
+        compile "org.springframework.boot:spring-boot-starter-jetty"
+        //compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa'
 
-    //mysql driver
-    compile "mysql:mysql-connector-java"
-    compile "com.zaxxer:HikariCP"
+        //lombok
+        compile group: 'org.projectlombok', name: 'lombok'
 
-    // https://mvnrepository.com/artifact/io.shardingjdbc/sharding-jdbc-spring-boot-starter
-    //compile group: 'io.shardingjdbc', name: 'sharding-jdbc-spring-boot-starter', version: '2.0.0.M3'
+        //mysql driver
+        //compile "mysql:mysql-connector-java"
+        //compile "com.zaxxer:HikariCP"
 
-    // https://mvnrepository.com/artifact/io.shardingjdbc/sharding-jdbc-core
-    compile group: 'io.shardingjdbc', name: 'sharding-jdbc-core', version: '2.0.3'
+        // https://mvnrepository.com/artifact/io.shardingjdbc/sharding-jdbc-spring-boot-starter
+        //compile group: 'io.shardingjdbc', name: 'sharding-jdbc-spring-boot-starter', version: '2.0.0.M3'
 
+        // https://mvnrepository.com/artifact/io.shardingjdbc/sharding-jdbc-core
+        //compile group: 'io.shardingjdbc', name: 'sharding-jdbc-core', version: '2.0.3'
+
+    }
 }

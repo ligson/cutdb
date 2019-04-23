@@ -1,0 +1,15 @@
+server:
+  port: 8777
+eureka:
+  instance:
+    ip-address: 127.0.0.1
+    prefer-ip-address: true
+    hostname: 127.0.0.1
+  client:
+    registerWithEureka: false
+    fetchRegistry: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.ip-address}:${server.port}/eureka/
+spring:
+  application:
+    name: eureka

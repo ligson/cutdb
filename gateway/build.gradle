@@ -1,0 +1,10 @@
+version "1.0-SNAPSHOT"
+
+dependencies {
+    compile("org.springframework.cloud:spring-cloud-starter-netflix-zuul") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+    compile("org.springframework.cloud:spring-cloud-starter-netflix-eureka-client") {
+        exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    }
+}

@@ -1,2 +1,4 @@
 rootProject.name = 'cutdemo'
-
+include "gateway"
+include "eureka"
+include "user"
