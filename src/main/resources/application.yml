@@ -15,3 +15,5 @@ logging:
     org.hibernate: info
     io.shardingjdbc: debug
     cutdb: debug
+server:
+  port: 8899

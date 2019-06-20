@@ -28,17 +28,17 @@ public class DataSourceConfig {
 
         HikariDataSource dataSource1 = new HikariDataSource();
         dataSource1.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource1.setJdbcUrl("jdbc:mysql://10.10.65.43:3306/ds1");
+        dataSource1.setJdbcUrl("jdbc:mysql://192.168.50.181:3306/ds1");
         dataSource1.setUsername("root");
-        dataSource1.setPassword("root");
+        dataSource1.setPassword("oMaY&&Ay");
         dataSourceMap.put("ds1", dataSource1);
 
         // 配置第二个数据源
         HikariDataSource dataSource2 = new HikariDataSource();
         dataSource2.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        dataSource2.setJdbcUrl("jdbc:mysql://10.10.65.43:3306/ds2");
+        dataSource2.setJdbcUrl("jdbc:mysql://192.168.50.181:3306/ds2");
         dataSource2.setUsername("root");
-        dataSource2.setPassword("root");
+        dataSource2.setPassword("oMaY&&Ay");
         dataSourceMap.put("ds2", dataSource2);
 
         // 配置Order表规则
@@ -47,15 +47,18 @@ public class DataSourceConfig {
         orderTableRuleConfig.setActualDataNodes("ds${1..2}.tt_user${1..2}");
 
         // 配置分库 + 分表策略
-        orderTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("org", "ds${org}"));
+        //orderTableRuleConfig.setDatabaseShardingStrategyConfig(new InlineShardingStrategyConfiguration("org", "ds${org}"));
+        orderTableRuleConfig.setDatabaseShardingStrategyConfig(new MyShardingStrategyConfiguration());
+
         //orderTableRuleConfig.setTableShardingStrategyConfig(new InlineShardingStrategyConfiguration("id", "tt_user{order_id % 2}"));
         // 自定义的分片算法实现
-        StandardShardingStrategyConfiguration standardStrategy = new StandardShardingStrategyConfiguration("id", MyPreciseShardingAlgorithm.class.getName());
-        orderTableRuleConfig.setTableShardingStrategyConfig(standardStrategy);
+        //StandardShardingStrategyConfiguration standardStrategy = new StandardShardingStrategyConfiguration("id", MyPreciseShardingAlgorithm.class.getName());
+        //orderTableRuleConfig.setTableShardingStrategyConfig(standardStrategy);
         // 配置分片规则
         ShardingRuleConfiguration shardingRuleConfig = new ShardingRuleConfiguration();
-        shardingRuleConfig.getTableRuleConfigs().add(orderTableRuleConfig);
+        //shardingRuleConfig.getTableRuleConfigs().add(orderTableRuleConfig);
         shardingRuleConfig.setDefaultDataSourceName("ds1");
+        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(new MyShardingStrategyConfiguration());
 
         // 省略配置order_item表规则...
         // ...

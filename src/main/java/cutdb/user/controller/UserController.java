@@ -2,6 +2,8 @@ package cutdb.user.controller;
 
 import cutdb.user.domain.User;
 import cutdb.user.service.UserService;
+import io.shardingjdbc.core.api.HintManager;
+import io.shardingjdbc.core.constant.ShardingOperator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +29,9 @@ public class UserController {
 
     @GetMapping("/listByOrg.json")
     List<User> listByOrg(@RequestParam Integer org) {
+        HintManager his = HintManager.getInstance();
+        his.setDatabaseShardingValue("test----test");
+        //his.addDatabaseShardingValue("tt_user", "org", ShardingOperator.EQUAL, "test---test");
         return userService.list(org);
     }
 
